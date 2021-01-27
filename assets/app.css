@@ -1,0 +1,41 @@
+.app{
+  width : 80%;
+  margin : auto; 
+}
+
+.level_1_container{
+  width : 100%;
+  display: inline-flex;
+}
+
+.graph_container{
+  width: 70%;
+}
+
+.graph_editors{
+  width : 60%;
+  display : inline-flex;
+  justify-content: center;
+}
+
+#dropdown_1{
+  width: 30%;
+  /* margin : auto; */
+}
+
+#input_1{
+  width: 30%;
+  /* margin: auto; */
+}
+
+#graph_1_slider{
+  /* width : 65%; */
+  margin-top : 0px;
+  margin-bottom : 20px; 
+}
+
+.text_container{
+  padding : auto;
+  margin : auto;
+  width : 30%
+}
