@@ -7,6 +7,16 @@ import dash_table
 import plotly.express as px
 import plotly.graph_objects as go
 
+from gensim.models import Word2Vec
+import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+from nltk import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem.wordnet import WordNetLemmatizer
+
+import pyLDAvis
 # import tensorflow as tf
 # import tensorflow.keras as keras
 # from tensorflow.keras.preprocessing.image import ImageDataGenerator, img_to_array, array_to_img, load_img
@@ -19,7 +29,7 @@ from base64 import decodebytes
 import datetime
 import re
 import json
-
+import string
 import pandas as pd
 import numpy as np
 
@@ -38,17 +48,22 @@ df = pd.DataFrame()
 for column in dfTemp.columns:
   df[column] = dfTemp[column][0]
 
+#There are some bad rows that we need to drop
 drop1 = df.loc[df['truth_value'] == 'full-flop'].index
 drop2 = df.loc[df['truth_value'] == 'half-flip'].index
 drop3 = df.loc[df['truth_value'] == 'no-flip'].index
 
 dfFinal = df.drop(index = drop1.append(drop2).append(drop3))
+jsonFinal = dfFinal.to_json()
+
+# Do some groupby methods to make pretty visuals
 dfFinalInitial = dfFinal.groupby('author').count()
 dfFinalIntermediate = pd.get_dummies(data = dfFinal, columns=['truth_value'])
 dfFinalEncodded = dfFinalIntermediate.groupby('author').sum()
 dfFinalEncodded['total'] = dfFinalInitial['truth_value']
 dfFinalEncodded = dfFinalEncodded.sort_values('total', axis = 0, ascending=False)
 
+# this is defined in global scobe because many function use it
 truthColumns = [
   'truth_value_pants-fire', 
   'truth_value_false', 
@@ -56,6 +71,8 @@ truthColumns = [
   'truth_value_half-true',
   'truth_value_mostly-true',
   'truth_value_true']
+
+# create the figure that will be the default when loading the app
 fig1 = go.Figure(
     layout = {'barmode' : 'stack'}
 )
@@ -66,6 +83,49 @@ for column in truthColumns:
     orientation = 'h',
   ))
 
+def create_word_2_vec(df, textColumn, partitionColumn, stopwordsList = None, size = 100, window = 5, min_count = 1, workers = 1, epochs = 5, kwargs = {}):
+  def data_partition(df, partitionColumn):
+    uniqueValues = df[partitionColumn].unique()
+    partition = {}
+    for value in uniqueValues:
+      part = df.loc[df[partitionColumn] == value]
+      partition[value] = (part)
+    return partition
+  partitionList = data_partition(df, partitionColumn)
+  word2VecPartition = {}
+  for truthValue,part in partitionList.items():
+    lemmatizer = WordNetLemmatizer()
+    part_tokens = part[textColumn].map(word_tokenize)
+    part_tokens_lemmatized = []
+    for text in part_tokens:
+      temp = []
+      for word in text:
+        if word not in string.punctuation and word not in stopwordsList:
+          temp.append(lemmatizer.lemmatize(word.lower()))
+      part_tokens_lemmatized.append(temp)
+
+    wordToVec = Word2Vec(part_tokens_lemmatized, size = size, window = window, min_count = min_count, workers = workers, **kwargs)
+    wordToVec.train(part_tokens_lemmatized, total_examples=wordToVec.corpus_count, epochs = epochs)
+    word2VecPartition[truthValue] = wordToVec
+  lemmatizer = WordNetLemmatizer()
+  all_tokens = df[textColumn].map(word_tokenize)
+  all_tokens_lemmatized = []
+  for text in all_tokens:
+    temp = []
+    for word in text:
+      if word not in string.punctuation and word not in stopwordsList:
+        temp.append(lemmatizer.lemmatize(word.lower()))
+    all_tokens_lemmatized.append(temp)
+
+  wordToVec = Word2Vec(all_tokens_lemmatized, size = size, window = window, min_count = min_count, workers = workers, **kwargs)
+  wordToVec.train(all_tokens_lemmatized, total_examples=wordToVec.corpus_count, epochs = epochs)
+  word2VecPartition['all'] = wordToVec
+  return word2VecPartition
+
+word2VecList = create_word_2_vec(dfFinal, 'quote', 'truth_value',stopwordsList = [], size = 150, window = 5, min_count=1, workers=4, epochs = 5)
+
+
+# begin the layout of the application
 app.layout = html.Div(
   id = 'body_container',
   children=[
@@ -244,7 +304,49 @@ app.layout = html.Div(
           label = 'Tab 3',
           value = 'tab_3',
           children=[
-            # html.Iframe(src = 'https://drive.google.com/uc?id=1c93vwvwgjBW9IXHgfQi3crCmDXGlY9De') #https://drive.google.com/uc?id=1c93vwvwgjBW9IXHgfQi3crCmDXGlY9De'')
+            html.Div(
+              className = 'graph_editors',
+              children=[
+                dcc.Dropdown(
+                  # className = 'graph',
+                  id='dropdown_2',
+                  options=[
+                    {'label': 'All', 'value': 'all'},
+                    {'label': 'True', 'value': 'true'},
+                    {'label': 'Mostly-True', 'value': 'mostly-true'},
+                    {'label': 'Half-True', 'value': 'half-true'},
+                    {'label': 'Barely-True', 'value': 'barely-true'},
+                    {'label': 'False', 'value': 'false'},
+                    {'label': 'Pants-On-Fire', 'value': 'pants-fire'},
+                  ],
+                  value='all'
+                ),
+                dcc.Input(
+                  # className = 'graph',
+                  id="input_2",
+                  type='search',
+                  placeholder="Words Like",
+                ),
+                dcc.Input(
+                  # className = 'graph',
+                  id="input_3",
+                  type='search',
+                  placeholder="Words Not like",
+                ),
+                html.Button(
+                  id = 'button_1',
+                  value = 'Show Associations'
+                ),
+              ]
+            ),
+            cyto.Cytoscape(
+              id='node_graph',
+              layout={'name': 'preset'},
+              style={'width': '90%', 'height': '1000px'},
+              elements=[
+                  {'data': {'id': 'one', 'label': 'Use the search bars to get started'}, 'position': {'x': 0, 'y': 0}},
+              ]
+            )
           ]
         ),
         dcc.Tab(
@@ -252,13 +354,24 @@ app.layout = html.Div(
           label = 'Tab 4',
           value = 'tab_4',
           children=[
-
+            html.Iframe(
+              id = 'lda_frame',
+              src = 'assets/lda_model.html',
+              height = '1000px',
+              width = '80%',
+            )
           ]
         ),
       ]
-    ),   
+    ),  
   ],
   className='app')
+
+
+
+##############################################################################################################################################
+
+
 
 @app.callback(
     dd.Output('datatable_1', "data"),
@@ -463,5 +576,56 @@ def graph_select(clickData):
   truthValue = truthColumns[curveNumber]
   author = clickData['points'][0]['y']
   return f'author = {author.replace(" ", " ")} && truth_value = {truthValue}'
+
+@app.callback(
+  [
+    dd.Output('node_graph', 'elements'),
+    dd.Output('node_graph', 'stylesheet')
+  ],
+  [
+    dd.Input('dropdown_2', 'value'),
+    dd.Input('button_1', 'n_clicks'),
+    dd.State('input_2', 'value'),
+    dd.State('input_3', 'value')
+  ]
+)
+def update_cytoscape(dropdownValue,n_clicks, positiveInput, negativeInput):
+  if positiveInput == None or positiveInput == '':
+    potitiveInput = []
+  else:
+    positiveInput = positiveInput.split(',')
+  if negativeInput == None or negativeInput == '':
+    negativeInput = []
+  else:
+    negativeInput = negativeInput.split(',')
+  wv = word2VecList[dropdownValue].wv
+  topNWords = wv.most_similar(positive = positiveInput, negative = negativeInput)
+  data = []
+  main = {
+    'data' : {'id' : 'main', 'label' : ' '.join(positiveInput)},
+    'position' : {'x': 0, 'y': 500}
+  }
+  data.append(main)
+  for element in enumerate(topNWords):
+    dataPoint = {
+      'data' : {'id': element[1][0], 'label' : element[1][0].title()},
+      'position' : {'x' : 1000, 'y': 100*element[0]}
+    }
+    edge = {'data' : {'source' : 'main', 'target' : element[1][0], 'label' : f"{str(round(10*element[1][1],3))}"}}
+
+    data.append(dataPoint)
+    data.append(edge)
+    stylesheet = [
+      {
+        'selector': 'edge',
+        'style': {'label': 'data(label)'}
+      },
+      {
+        'selector' : 'node',
+        'style': {'label' : 'data(label)'}
+      }
+    ]
+  return data, stylesheet
+
 if __name__ == '__main__':
     app.run_server(debug=True)

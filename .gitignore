@@ -1,3 +1,4 @@
 capstone-env/*
-capstone-env
 politifact/*
+__*
+.*
