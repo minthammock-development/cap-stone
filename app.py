@@ -356,7 +356,43 @@ app.layout = html.Div(
           children=[
             html.Iframe(
               id = 'lda_frame',
-              src = 'assets/lda_model.html',
+              src = 'assets/lda_model_all.html',
+              height = '1000px',
+              width = '80%',
+            ),
+            html.Iframe(
+              id = 'lda_true_frame',
+              src = 'assets/lda_model_true.html',
+              height = '1000px',
+              width = '80%',
+            ),
+            html.Iframe(
+              id = 'lda_barely_true_frame',
+              src = 'assets/lda_model_barely-true.html',
+              height = '1000px',
+              width = '80%',
+            ),
+            html.Iframe(
+              id = 'lda_half_true_frame',
+              src = 'assets/lda_model_half-true.html',
+              height = '1000px',
+              width = '80%',
+            ),
+            html.Iframe(
+              id = 'lda_mostly_true_frame',
+              src = 'assets/lda_model_mostly-true.html',
+              height = '1000px',
+              width = '80%',
+            ),
+            html.Iframe(
+              id = 'lda_false_frame',
+              src = 'assets/lda_model_false.html',
+              height = '1000px',
+              width = '80%',
+            ),
+            html.Iframe(
+              id = 'lda_pants_fire_frame',
+              src = 'assets/lda_model_pants-fire.html',
               height = '1000px',
               width = '80%',
             )
