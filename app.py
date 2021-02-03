@@ -83,46 +83,46 @@ for column in truthColumns:
     orientation = 'h',
   ))
 
-def create_word_2_vec(df, textColumn, partitionColumn, stopwordsList = None, size = 100, window = 5, min_count = 1, workers = 1, epochs = 5, kwargs = {}):
-  def data_partition(df, partitionColumn):
-    uniqueValues = df[partitionColumn].unique()
-    partition = {}
-    for value in uniqueValues:
-      part = df.loc[df[partitionColumn] == value]
-      partition[value] = (part)
-    return partition
-  partitionList = data_partition(df, partitionColumn)
-  word2VecPartition = {}
-  for truthValue,part in partitionList.items():
-    lemmatizer = WordNetLemmatizer()
-    part_tokens = part[textColumn].map(word_tokenize)
-    part_tokens_lemmatized = []
-    for text in part_tokens:
-      temp = []
-      for word in text:
-        if word not in string.punctuation and word not in stopwordsList:
-          temp.append(lemmatizer.lemmatize(word.lower()))
-      part_tokens_lemmatized.append(temp)
+# def create_word_2_vec(df, textColumn, partitionColumn, stopwordsList = None, size = 100, window = 5, min_count = 1, workers = 1, epochs = 5, kwargs = {}):
+#   def data_partition(df, partitionColumn):
+#     uniqueValues = df[partitionColumn].unique()
+#     partition = {}
+#     for value in uniqueValues:
+#       part = df.loc[df[partitionColumn] == value]
+#       partition[value] = (part)
+#     return partition
+#   partitionList = data_partition(df, partitionColumn)
+#   word2VecPartition = {}
+#   for truthValue,part in partitionList.items():
+#     lemmatizer = WordNetLemmatizer()
+#     part_tokens = part[textColumn].map(word_tokenize)
+#     part_tokens_lemmatized = []
+#     for text in part_tokens:
+#       temp = []
+#       for word in text:
+#         if word not in string.punctuation and word not in stopwordsList:
+#           temp.append(lemmatizer.lemmatize(word.lower()))
+#       part_tokens_lemmatized.append(temp)
 
-    wordToVec = Word2Vec(part_tokens_lemmatized, size = size, window = window, min_count = min_count, workers = workers, **kwargs)
-    wordToVec.train(part_tokens_lemmatized, total_examples=wordToVec.corpus_count, epochs = epochs)
-    word2VecPartition[truthValue] = wordToVec
-  lemmatizer = WordNetLemmatizer()
-  all_tokens = df[textColumn].map(word_tokenize)
-  all_tokens_lemmatized = []
-  for text in all_tokens:
-    temp = []
-    for word in text:
-      if word not in string.punctuation and word not in stopwordsList:
-        temp.append(lemmatizer.lemmatize(word.lower()))
-    all_tokens_lemmatized.append(temp)
+#     wordToVec = Word2Vec(part_tokens_lemmatized, size = size, window = window, min_count = min_count, workers = workers, **kwargs)
+#     wordToVec.train(part_tokens_lemmatized, total_examples=wordToVec.corpus_count, epochs = epochs)
+#     word2VecPartition[truthValue] = wordToVec
+#   lemmatizer = WordNetLemmatizer()
+#   all_tokens = df[textColumn].map(word_tokenize)
+#   all_tokens_lemmatized = []
+#   for text in all_tokens:
+#     temp = []
+#     for word in text:
+#       if word not in string.punctuation and word not in stopwordsList:
+#         temp.append(lemmatizer.lemmatize(word.lower()))
+#     all_tokens_lemmatized.append(temp)
 
-  wordToVec = Word2Vec(all_tokens_lemmatized, size = size, window = window, min_count = min_count, workers = workers, **kwargs)
-  wordToVec.train(all_tokens_lemmatized, total_examples=wordToVec.corpus_count, epochs = epochs)
-  word2VecPartition['all'] = wordToVec
-  return word2VecPartition
+#   wordToVec = Word2Vec(all_tokens_lemmatized, size = size, window = window, min_count = min_count, workers = workers, **kwargs)
+#   wordToVec.train(all_tokens_lemmatized, total_examples=wordToVec.corpus_count, epochs = epochs)
+#   word2VecPartition['all'] = wordToVec
+#   return word2VecPartition
 
-word2VecList = create_word_2_vec(dfFinal, 'quote', 'truth_value',stopwordsList = [], size = 150, window = 5, min_count=1, workers=4, epochs = 5)
+# word2VecList = create_word_2_vec(dfFinal, 'quote', 'truth_value',stopwordsList = [], size = 150, window = 5, min_count=1, workers=4, epochs = 5)
 
 
 # begin the layout of the application
@@ -625,43 +625,43 @@ def graph_select(clickData):
     dd.State('input_3', 'value')
   ]
 )
-def update_cytoscape(dropdownValue,n_clicks, positiveInput, negativeInput):
-  if positiveInput == None or positiveInput == '':
-    potitiveInput = []
-  else:
-    positiveInput = positiveInput.split(',')
-  if negativeInput == None or negativeInput == '':
-    negativeInput = []
-  else:
-    negativeInput = negativeInput.split(',')
-  wv = word2VecList[dropdownValue].wv
-  topNWords = wv.most_similar(positive = positiveInput, negative = negativeInput)
-  data = []
-  main = {
-    'data' : {'id' : 'main', 'label' : ' '.join(positiveInput)},
-    'position' : {'x': 0, 'y': 500}
-  }
-  data.append(main)
-  for element in enumerate(topNWords):
-    dataPoint = {
-      'data' : {'id': element[1][0], 'label' : element[1][0].title()},
-      'position' : {'x' : 1000, 'y': 100*element[0]}
-    }
-    edge = {'data' : {'source' : 'main', 'target' : element[1][0], 'label' : f"{str(round(10*element[1][1],3))}"}}
+# def update_cytoscape(dropdownValue,n_clicks, positiveInput, negativeInput):
+#   if positiveInput == None or positiveInput == '':
+#     potitiveInput = []
+#   else:
+#     positiveInput = positiveInput.split(',')
+#   if negativeInput == None or negativeInput == '':
+#     negativeInput = []
+#   else:
+#     negativeInput = negativeInput.split(',')
+#   wv = word2VecList[dropdownValue].wv
+#   topNWords = wv.most_similar(positive = positiveInput, negative = negativeInput)
+#   data = []
+#   main = {
+#     'data' : {'id' : 'main', 'label' : ' '.join(positiveInput)},
+#     'position' : {'x': 0, 'y': 500}
+#   }
+#   data.append(main)
+#   for element in enumerate(topNWords):
+#     dataPoint = {
+#       'data' : {'id': element[1][0], 'label' : element[1][0].title()},
+#       'position' : {'x' : 1000, 'y': 100*element[0]}
+#     }
+#     edge = {'data' : {'source' : 'main', 'target' : element[1][0], 'label' : f"{str(round(10*element[1][1],3))}"}}
 
-    data.append(dataPoint)
-    data.append(edge)
-    stylesheet = [
-      {
-        'selector': 'edge',
-        'style': {'label': 'data(label)'}
-      },
-      {
-        'selector' : 'node',
-        'style': {'label' : 'data(label)'}
-      }
-    ]
-  return data, stylesheet
+#     data.append(dataPoint)
+#     data.append(edge)
+#     stylesheet = [
+#       {
+#         'selector': 'edge',
+#         'style': {'label': 'data(label)'}
+#       },
+#       {
+#         'selector' : 'node',
+#         'style': {'label' : 'data(label)'}
+#       }
+#     ]
+#   return data, stylesheet
 
 if __name__ == '__main__':
     app.run_server(debug=True)
