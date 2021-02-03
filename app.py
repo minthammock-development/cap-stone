@@ -37,7 +37,7 @@ from flask import Flask
 
 external_stylesheets = ['./assets/app.css']
 
-server = Flask('mod4-dash')
+server = Flask('capstone-dash-app')
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets, server=server)
 
