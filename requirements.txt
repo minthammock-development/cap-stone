@@ -36,7 +36,7 @@ nltk==3.5
 numexpr==2.7.2
 numpy==1.19.5
 packaging==20.8
-pandas==1.2.0
+pandas
 parsel==1.6.0
 patsy==0.5.1
 plotly==4.14.1
