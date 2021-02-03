@@ -613,18 +613,18 @@ def graph_select(clickData):
   author = clickData['points'][0]['y']
   return f'author = {author.replace(" ", " ")} && truth_value = {truthValue}'
 
-@app.callback(
-  [
-    dd.Output('node_graph', 'elements'),
-    dd.Output('node_graph', 'stylesheet')
-  ],
-  [
-    dd.Input('dropdown_2', 'value'),
-    dd.Input('button_1', 'n_clicks'),
-    dd.State('input_2', 'value'),
-    dd.State('input_3', 'value')
-  ]
-)
+# @app.callback(
+#   [
+#     dd.Output('node_graph', 'elements'),
+#     dd.Output('node_graph', 'stylesheet')
+#   ],
+#   [
+#     dd.Input('dropdown_2', 'value'),
+#     dd.Input('button_1', 'n_clicks'),
+#     dd.State('input_2', 'value'),
+#     dd.State('input_3', 'value')
+#   ]
+# )
 # def update_cytoscape(dropdownValue,n_clicks, positiveInput, negativeInput):
 #   if positiveInput == None or positiveInput == '':
 #     potitiveInput = []
