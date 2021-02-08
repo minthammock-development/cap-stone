@@ -124,17 +124,111 @@ for column in truthColumns:
 
 # word2VecList = create_word_2_vec(dfFinal, 'quote', 'truth_value',stopwordsList = [], size = 150, window = 5, min_count=1, workers=4, epochs = 5)
 
-
+#############################################################################################################################################################
 # begin the layout of the application
+#############################################################################################################################################################
+
 app.layout = html.Div(
   id = 'body_container',
   children=[
     dcc.Tabs(
+      value = 'tab_1',
       children=[
         dcc.Tab(
-          id = 'tab-1',
-          label = 'Tab 1',
+          id = 'tab_1',
+          label = 'Project Overview',
           value = 'tab_1',
+          className='tab',
+          children=[
+            html.Div(
+              children=[
+                html.H1(
+                  'Data Understanding'
+                ),
+                html.P(
+                  '''
+                    The data used for this paper was pulled from Politifact.com. 
+                    Politifact is a lovely organization that takes the time to investigate viral claims that deal with hot or sensative topics. 
+                    Unsurprisingly, many of these claims are political in nature, but not strictly so. 
+                    Politifact investigates these claims from variosu sources and writes a small article summarizing their findings as to the validity of the content. 
+                    They do the hard work! If you find this paper at all interesting it might be worth sending a little money their way. 
+                    5 bucks people, I'm not asking for the moon. 
+                    Anyways, Politifact vets the claims and boils it down to six distinct categories: Pants on fire, false, barly-true, half-true and true. 
+                    Pants fire is a special category reserved for falsehoods that not only lack any semblence of truth, but are also particularly outlandish or detrimental. 
+                    A good example would be, "The democrates say they are going to blow up the moon." 
+                    The classifications are somewhat subjective but because professionals took the time to look into the truth and cite their sources, I hold the labels as gold standard when it comes to verifying the level of truth in a statement. 
+                    There's one problem with this approach. 
+                    Research is hard and Politifact has only done 19000 evaluations over the past 12 years or so. 
+                    Yes, that's a lot of investigations, but not when thinking about NLP neural networks which are often trained on bodies of work as large as all of wikipedia.
+                    Because of the raw data limitation, I'm skeptical of the ability to classify truth to say +80% accuracy. 
+                    Ultimately, the work done here will need to be supercharged with data in order to reach it's true potential. 
+                    For now, let's take a look at what we have. 
+                    An important consideration ever present in modeling is class imbalance. 
+                    Here's our given composition.
+                  '''
+                ),
+                html.Img(
+                  src = "https://drive.google.com/uc?id=1EjxE9yDNB9mj2lFiUfnypbdTDUOcZMKC",
+                  className='narrative_image'
+                ),
+                html.P(
+                  '''
+                    The imbalence is not as severe as it could be, but this still merits adjusting for. 
+                    Sci-kit learn has a particular function which calculated the weights needed for each class in order to mimic balanced amounts of data. 
+                    This is the primary tool I am going to use to address the imbalance, please see the code sections for specifics on the implementation. 
+                    With imbalance addressed we will take a detour into the data itself. 
+                    Our dataset includes 18436 different records. 
+                    These records have three text columns. 
+                    Our target column is the truth_value column which is the basis of our supervised learning task for this paper. 
+                    In addition, we have a column of quotes which are consumed by our model in order to make predictions on the truth value. 
+                    The final column is the author column which routinely accounts for the person or organization responsible for the creation of the quote. 
+                    What do these columns look like? 
+                    The next visual represents the 10 most frequent authors and the breakdown of their quotes into the various truth values.
+                  '''
+                ),
+                html.Img(
+                  src = "https://drive.google.com/uc?id=1gL4xn0HS9aSG4sG4O38i6uVu8MV_Zqlh",
+                  className='narrative_image',
+                ),
+                html.P(
+                  '''
+                    With the rise of social media, it makes sense that those at the top of the list are figures in the modern political scene. 
+                    In general, Politifact reviews quotes with implications for the real world. 
+                    With the prolification of mis-information as a political tool, much of their work has centered on uncovering the truth behind statements made in the political sphere. 
+                    Please note that there are lumped categories such as "Facebook posts" and "Viral image". 
+                    These categories include quotes that achieved viral status in spreading through social media sites. 
+                    You won't find a good definition of viral in this paper as the exact criteria used to determine what elevates something to viral status isn't exactly clear. 
+                    For a better sense of the nature of the quotes themselves, please see the hosted application for this paper. 
+                    Given the top authors are pulled mostly from the political realm, it follows that words common in modern political times are highly represented. 
+                    Check out the following two word clouds for a more intuitive idea about the nature of the quotes corpus. 
+                    This example excludes stop words from consideration (the, and, where, in, is, I, etc...).
+                  '''
+                ),
+                html.Img(
+                  src = "https://drive.google.com/uc?id=1aJmMaPmbhdrM2VB7OGGISv7sRhe61na4",
+                  className='narrative_image'
+                ),
+                html.P(
+                  '''
+                    Unsuprizingly, the word cloud that excludes stop words consists of what we might expect: Words about hot topic issues, words about the voting process, locations, individuals in politics, money, governmental institutions and the like. 
+                    Summary statistics are also worth considering. 
+                    While using the quotes to determine the truth value will ultimately be the job of our models, let's see if there's any differences we can spot that might seperate the classes at hand. 
+                  '''
+                ),
+                html.Img(
+                  src = "https://drive.google.com/uc?id=1pMjZ6eUHw2rFrXjsCD-ip3LTxS9xVG7Q",
+                  className='narrative_image'
+                ),
+              ],
+              className='narrative_container'
+            )
+          ]
+        ),
+        dcc.Tab(
+          id = 'tab_2',
+          label = 'Authors & Quotes',
+          value = 'tab_2',
+          className='tab',
           children=[
             html.Div(
               className = 'graph_editors',
@@ -227,82 +321,12 @@ app.layout = html.Div(
             ),
           ]
         ),
+
         dcc.Tab(
-          id = 'tab-2',
-          label = 'Tab 2',
-          value = 'tab_2',
-          children=[
-            html.H1(
-              'Data Understanding'
-            ),
-            html.P(
-              '''
-                The data used for this paper was pulled from Politifact.com. 
-                Politifact is a lovely organization that takes the time to investigate viral claims that deal with hot or sensative topics. 
-                Unsurprisingly, many of these claims are political in nature, but not strictly so. 
-                Politifact investigates these claims from variosu sources and writes a small article summarizing their findings as to the validity of the content. 
-                They do the hard work! If you find this paper at all interesting it might be worth sending a little money their way. 
-                5 bucks people, I'm not asking for the moon. 
-                Anyways, Politifact vets the claims and boils it down to six distinct categories: Pants on fire, false, barly-true, half-true and true. 
-                Pants fire is a special category reserved for falsehoods that not only lack any semblence of truth, but are also particularly outlandish or detrimental. 
-                A good example would be, "The democrates say they are going to blow up the moon." 
-                The classifications are somewhat subjective but because professionals took the time to look into the truth and cite their sources, I hold the labels as gold standard when it comes to verifying the level of truth in a statement. 
-                There's one problem with this approach. 
-                Research is hard and Politifact has only done 19000 evaluations over the past 12 years or so. 
-                Yes, that's a lot of investigations, but not when thinking about NLP neural networks which are often trained on bodies of work as large as all of wikipedia.
-                Because of the raw data limitation, I'm skeptical of the ability to classify truth to say +80% accuracy. 
-                Ultimately, the work done here will need to be supercharged with data in order to reach it's true potential. 
-                For now, let's take a look at what we have. 
-                An important consideration ever present in modeling is class imbalance. 
-                Here's our given composition.
-              '''
-            ),
-            html.Img(src = "https://drive.google.com/uc?id=1EjxE9yDNB9mj2lFiUfnypbdTDUOcZMKC"),
-            html.P(
-              '''
-                The imbalence is not as severe as it could be, but this still merits adjusting for. 
-                Sci-kit learn has a particular function which calculated the weights needed for each class in order to mimic balanced amounts of data. 
-                This is the primary tool I am going to use to address the imbalance, please see the code sections for specifics on the implementation. 
-                With imbalance addressed we will take a detour into the data itself. 
-                Our dataset includes 18436 different records. 
-                These records have three text columns. 
-                Our target column is the truth_value column which is the basis of our supervised learning task for this paper. 
-                In addition, we have a column of quotes which are consumed by our model in order to make predictions on the truth value. 
-                The final column is the author column which routinely accounts for the person or organization responsible for the creation of the quote. 
-                What do these columns look like? 
-                The next visual represents the 10 most frequent authors and the breakdown of their quotes into the various truth values.
-              '''
-            ),
-            html.Img(src = "https://drive.google.com/uc?id=1gL4xn0HS9aSG4sG4O38i6uVu8MV_Zqlh"),
-            html.P(
-              '''
-                With the rise of social media, it makes sense that those at the top of the list are figures in the modern political scene. 
-                In general, Politifact reviews quotes with implications for the real world. 
-                With the prolification of mis-information as a political tool, much of their work has centered on uncovering the truth behind statements made in the political sphere. 
-                Please note that there are lumped categories such as "Facebook posts" and "Viral image". 
-                These categories include quotes that achieved viral status in spreading through social media sites. 
-                You won't find a good definition of viral in this paper as the exact criteria used to determine what elevates something to viral status isn't exactly clear. 
-                For a better sense of the nature of the quotes themselves, please see the hosted application for this paper. 
-                Given the top authors are pulled mostly from the political realm, it follows that words common in modern political times are highly represented. 
-                Check out the following two word clouds for a more intuitive idea about the nature of the quotes corpus. 
-                This example excludes stop words from consideration (the, and, where, in, is, I, etc...).
-              '''
-            ),
-            html.Img(src = "https://drive.google.com/uc?id=1aJmMaPmbhdrM2VB7OGGISv7sRhe61na4" ),
-            html.P(
-              '''
-                Unsuprizingly, the word cloud that excludes stop words consists of what we might expect: Words about hot topic issues, words about the voting process, locations, individuals in politics, money, governmental institutions and the like. 
-                Summary statistics are also worth considering. 
-                While using the quotes to determine the truth value will ultimately be the job of our models, let's see if there's any differences we can spot that might seperate the classes at hand. 
-              '''
-            ),
-            html.Img(src = "https://drive.google.com/uc?id=1pMjZ6eUHw2rFrXjsCD-ip3LTxS9xVG7Q"),
-          ]
-        ),
-        dcc.Tab(
-          id = 'tab-3',
-          label = 'Tab 3',
+          id = 'tab_3',
+          label = 'Word2Vec Embedding',
           value = 'tab_3',
+          className='tab',
           children=[
             html.Div(
               className = 'graph_editors',
@@ -350,52 +374,124 @@ app.layout = html.Div(
           ]
         ),
         dcc.Tab(
-          id = 'tab-4',
-          label = 'Tab 4',
+          id = 'tab_4',
+          label = 'LDA Cluster Models',
           value = 'tab_4',
+          className='tab',
           children=[
-            html.Iframe(
-              id = 'lda_frame',
-              src = 'assets/lda_model_all.html',
-              height = '1000px',
-              width = '80%',
+            html.Div(
+              children = [
+                html.H1(
+                  children = ["All Quotes"],
+                  className='tab_4_title'
+                ),
+                html.Iframe(
+                  id = 'lda_frame',
+                  src = 'assets/lda_model_all.html',
+                  height = '1000px',
+                  width = '80%',
+                  className='lda_window'
+                )
+              ],
+              className='lda_container'
             ),
-            html.Iframe(
-              id = 'lda_true_frame',
-              src = 'assets/lda_model_true.html',
-              height = '1000px',
-              width = '80%',
+            html.Div(
+              children = [
+                html.H1(
+                  children=["True Quotes"],
+                  className='tab_4_title'
+                ),
+                html.Iframe(
+                  id = 'lda_true_frame',
+                  src = 'assets/lda_model_true.html',
+                  height = '1000px',
+                  width = '80%',
+                  className='lda_window',
+                ),
+              ],
+              className = 'lda_container'
             ),
-            html.Iframe(
-              id = 'lda_barely_true_frame',
-              src = 'assets/lda_model_barely-true.html',
-              height = '1000px',
-              width = '80%',
+            html.Div(
+              children = [
+                html.H1(
+                  children = ["Mostly-True Quotes"],
+                  className='tab_4_title'
+                ),
+                html.Iframe(
+                  id = 'lda_mostly_true_frame',
+                  src = 'assets/lda_model_mostly-true.html',
+                  height = '1000px',
+                  width = '80%',
+                  className='lda_window',
+                ),
+              ],
+              className = 'lda_container'
             ),
-            html.Iframe(
-              id = 'lda_half_true_frame',
-              src = 'assets/lda_model_half-true.html',
-              height = '1000px',
-              width = '80%',
+            html.Div(
+              children = [
+                html.H1(
+                  children=["Half-True Quotes"],
+                  className='tab_4_title'
+                ),
+                html.Iframe(
+                  id = 'lda_half_true_frame',
+                  src = 'assets/lda_model_half-true.html',
+                  height = '1000px',
+                  width = '80%',
+                  className='lda_window',
+                ),
+              ],
+              className = 'lda_model'
             ),
-            html.Iframe(
-              id = 'lda_mostly_true_frame',
-              src = 'assets/lda_model_mostly-true.html',
-              height = '1000px',
-              width = '80%',
+            html.Div(
+              children = [
+                html.H1(
+                  children=["Barely-True Quotes"],
+                  className='tab_4_title'
+                ),
+                html.Iframe(
+                  id = 'lda_barely_true_frame',
+                  src = 'assets/lda_model_barely-true.html',
+                  height = '1000px',
+                  width = '80%',
+                  className='lda_window',
+                ),
+              ],
+              className = 'lda_container'
             ),
-            html.Iframe(
-              id = 'lda_false_frame',
-              src = 'assets/lda_model_false.html',
-              height = '1000px',
-              width = '80%',
+            html.Div(
+              children = [
+                html.H1(
+                  children=["False Quotes"],
+                  className='tab_4_title'
+                ),
+                html.Iframe(
+                  id = 'lda_false_frame',
+                  src = 'assets/lda_model_false.html',
+                  height = '1000px',
+                  width = '80%',
+                  className='lda_window',
+                ),
+              ],
+              className = 'lda_container'
             ),
-            html.Iframe(
-              id = 'lda_pants_fire_frame',
-              src = 'assets/lda_model_pants-fire.html',
-              height = '1000px',
-              width = '80%',
-            )
+            html.Div(
+              children = [
+                html.H1(
+                  children=["Pants-Fire Quotes"],
+                  className='tab_4_title',
+
+                ),
+                html.Iframe(
+                  id = 'lda_pants_fire_frame',
+                  src = 'assets/lda_model_pants-fire.html',
+                  height = '1000px',
+                  width = '80%',
+                  className='lda_window',
+                )
+              ],
+              className='lda_container'
+            ),
           ]
         ),
       ]
@@ -406,7 +502,8 @@ app.layout = html.Div(
 
 
 ##############################################################################################################################################
-
+# CALLBACK SECTION
+##############################################################################################################################################
 
 
 @app.callback(

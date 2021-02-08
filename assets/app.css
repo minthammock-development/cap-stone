@@ -1,41 +1,90 @@
+#_dash-app-content{
+  background-image: url('particle_background.png');
+}
 .app{
   width : 80%;
   margin : auto; 
+  background-color: rgba(206, 206, 206, 0.918);
 }
 
 .level_1_container{
   width : 100%;
   display: inline-flex;
+  margin: 20px 0px;
 }
 
 .graph_container{
   width: 70%;
+  background-color: rgba(206, 206, 206, 0.0)
 }
 
 .graph_editors{
   width : 60%;
-  display : inline-flex;
-  justify-content: center;
+  display:flex;
+  justify-content:flex-start;
+  margin: 20px 0px 0px;
 }
 
 #dropdown_1{
   width: 30%;
-  /* margin : auto; */
+  margin:0px 0px 0px 25px;
 }
 
 #input_1{
   width: 30%;
-  /* margin: auto; */
+  margin:0px 0px 0px 50px;
+}
+
+#graph_1{
+  margin: 0px 0px 0px 25px;
+  background-color: rgba(206, 206, 206, 0.0)
 }
 
 #graph_1_slider{
   /* width : 65%; */
-  margin-top : 0px;
-  margin-bottom : 20px; 
+  margin: 20px 0px 0px 25px;
+  padding: 0px 25px 25px;
 }
 
 .text_container{
-  padding : auto;
-  margin : auto;
-  width : 30%
+  padding: 0px 25px;
+  margin: 71px 0px 44px 25px;
+  width : 25%;
+}
+
+#datatable_1{
+  width: 90%;
+  margin: auto;
+}
+
+.narrative_container{
+  width: 80%;
+  margin: 0 auto 0 auto;
+
+}
+
+.narrative_image{
+  width: 100%;
+  margin: 0 auto 0 auto;
+}
+
+.lda_container{
+  margin : 2em auto 1em auto;
+  /* display : flex; */
+  justify-content: center;
+  border-width: 5px;
+  border-color: black;
+  border-radius: 5px;
+  box-shadow : 10px;
+  width: 95%;
+}
+
+.tab_4_title{
+  display: block;
+  text-align: center;
+}
+
+.lda_window{
+  /* display: flex; */
+  width: 100%
 }
