@@ -35,11 +35,11 @@ import numpy as np
 
 from flask import Flask
 
-external_stylesheets = ['./assets/app.css']
+# external_stylesheets = ['./assets/app.css']
 
 server = Flask('capstone-dash-app')
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets, server=server)
+app = dash.Dash(__name__, server=server)
 
 # begin the code to set up the data for the application
 # read in our data from  the native JSON 
