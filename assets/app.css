@@ -7,6 +7,51 @@
   background-color: rgba(206, 206, 206, 0.918);
 }
 
+.markdown{
+  width : 80%;
+  margin: auto;
+  font-size: 1.5em;
+  line-height: 1.3em;
+}
+
+img{
+  width: 100%;
+  margin: 0 auto 0 auto;
+}
+
+img[alt=pie_chart]{
+  width: 60%;
+  margin: 2% auto 2% 20%;
+}
+
+img[alt=authors]{
+  width: 80%;
+  margin: 2% auto 2% 5%;
+}
+
+img[alt=word_cloud]{
+  width: 60%;
+  margin: 2% auto 2% 20%;
+}
+
+img[alt=boxen_plot]{
+  width: 80%;
+  margin: 2% auto 2% 10%;
+}
+
+img[alt = bigram]{
+  width: 100%;
+}
+
+img[alt = lime]{
+  width: 100%;
+}
+
+img[alt=confusion_matrix]{
+  width: 60%;
+  margin: 2% auto 2% 20%;
+}
+
 .level_1_container{
   width : 100%;
   display: inline-flex;
@@ -55,12 +100,6 @@
 #datatable_1{
   width: 90%;
   margin: auto;
-}
-
-.narrative_container{
-  width: 80%;
-  margin: 0 auto 0 auto;
-
 }
 
 .narrative_image{
