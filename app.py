@@ -136,7 +136,7 @@ app.layout = html.Div(
       children=[
         dcc.Tab(
           id = 'tab_1',
-          label = 'Project Overview',
+          label = 'Project Details',
           value = 'tab_1',
           className='tab',
           children=[
@@ -148,9 +148,15 @@ app.layout = html.Div(
                     '''
                       # Abstract
 
-                      This paper is a first attempt at using neural network technology to determine the truth value of short, headline like, statements. The statements used in this paper are political in nature. While an examination of lies in politics was not my direct motivation, ultimately, many of the damaging mis-information campaigns are centered around the political scene. The sole data source for this project reflects this political leaning, and as such, I will refrain from drawing conclusions about more general statements. Since the proliferation of social media as a primary means of spreading misinformation, society, worldwide, has been reeling from the effects. Here in the United States, misinformation has been used as a tool for undermining our most fundamental democratic institutions and is quickly eroding the moral cohesion of local communities. Since the beginning of the mis-information plague, there have yet to be any widely used tools which can combat the disease with reasonable surety. Perhaps, this is due to the fact that a lie takes only a moment to create, but hours to fully debunk. To be clear, this paper is an exploration of neural networks and their ability to discern truth with varying degrees of information. At this point, the models are not performing well enough to be used as a digital vaccine to the larger problem. It is my hope that the work in this paper will be improved upon by others to create a lasting light in the dark sea of lies we have all been swimming in.
+                      This paper is a first attempt at using neural network technology to determine the truth value of short, headline like, statements. The statements used in this paper are political in nature. While an examination of lies in politics was not my direct motivation, ultimately, many of the damaging mis-information campaigns are centered around the political scene. The sole data source for this project reflects this political leaning, and as such, I will refrain from drawing conclusions about more general statements. 
+                      
+                      Since the proliferation of social media as a primary means of spreading misinformation, society, worldwide, has been reeling from the effects. Here in the United States, misinformation has been used as a tool for undermining our most fundamental democratic institutions and is quickly eroding the moral cohesion of local communities. Since the beginning of the mis-information plague, there have yet to be any widely used tools which can combat the disease with reasonable surety. Perhaps, this is due to the fact that a lie takes only a moment to create, but hours to fully debunk. To be clear, this paper is an exploration of neural networks and their ability to discern truth with varying degrees of information. 
+                      
+                      At this point, the models are not performing well enough to be used as a digital vaccine to the larger problem. It is my hope that the work in this paper will be improved upon by others to create a lasting light in the dark sea of lies we have all been swimming in.
+                      
                       It's worth defining the use of misinformation as it will be used in this paper. Misinformation is the presentation of factually incorrect information that is portrayed as being true. Whether or not the source/speaker of the information believes what was said was correct, is irrelevant. Specifically, the data from PolitiFact with labels of "pants-fire", "false," and to some extent "barely-true" are what I consider to be the primary examples of misinformation.
                       At the end of this technical paper, you will understand much about the nature of the quotes we examined and of the modeling approaches we investigated. As it stands the final/best model in this paper is not ready for production. More research, data and approaches will be needed to solve - to any realistic degree anyways - the plague of misinformation. This isn't to say no progress has been made. To be clear, most models in this paper have shown the ability to classify the truth of statements significantly better than a random guess. The metrics of the models show the training process has picked up on the nature of truth to varying degrees.
+                      
                       This paper is for all interested in misinformation and how modeling might be used as a tool to combat its use. More specifically, I am reaching out to social media companies, journalists and people of the political world to examine the trends found in this paper. The points I wish to leave with this audience are the following:
 
                       1.	Combatting misinformation is in everyone's best interests.
@@ -159,6 +165,12 @@ app.layout = html.Div(
                       4.	Portions of the outrageously false category - pants fire - use language that is particularly violent. Most of these quotes were generated on social media and it is my belief that they represent malicious content.
 
                       CRISP-DM was my research methodology of choice. Now to the matter at hand.
+                      ## Recommendations
+                      Despite the lack of the production worthy model there are several action items for various stake holders. 
+                      
+                      1. For those wishing to devote resources to fight misinformation; virtually all clusters of the false quotes center around presidential elections and candidates. Reasorces should be ramped up and deployed at times of heightened contention during presidential elections and primaries. 
+                      2. For politicians, most misinformation is based around people and not issues (with the notable exception of health care). If you wish to advance legislation, decoupling the issue from individuals will the best way to limit misinformation's impact.
+                      3. For Journalists and people at large: Email chains, social media posts and viral content should never be used as a source for content.
 
                       # Business Understanding
 
@@ -415,6 +427,49 @@ app.layout = html.Div(
                       Click [this](https://drive.google.com/uc?id=1F3UGG8kYhhgaUDMa0uYfb5g7azZcCws0) link to interact with the scattertext visual.
 
                       This concludes our exploration into the dataset. Because the purpose of this paper isn't to analyze the impact of the author on our model's ability to determine truth values, we will omit further investigation into that column. Ultimately, a holistic approach to determining the underlying truth of posts on media can and should include all available information available to make classifications. I will consider adding more information in an ending section if time allows. 
+                      
+                      # Data Preperation for Modeling
+
+                      Most of our data preprocessing has already been completed in our search for knowledge about the corpus. To re-hash, the methods which will be employed for modeling will be the following. 
+
+                      1. Stop Word removal 
+                      2. lemmatization using NLTK
+                      3. ID Vectorization
+                      4. TF-IDF Vectorization
+                      5. Token Embeddings
+                      6. Word2vec Embeddings
+
+                      Various combinations of these tools will be employed to determine what level of preprocessing gives the best result. For those of you who are new to the NLP word here are some short explanations of these terms.
+
+                      ## Stop Words
+
+                      Stop words are the high frequency words used in speech that don't give any information about the content they are used in. "The", "For", "When" are some examples. Pronouns are also considered stop words because they don't give information when taken out of context.
+
+                      ## Lemmatization
+
+                      This is a technical term from the etemology - the study of words - world. Lemmatizing is the process of reducing words to their root form. 
+
+                      Running -> run, 
+
+                      says -> say, 
+
+                      denies -> deny. 
+
+                      The rules for how this works are technical and based on latin. You've probably seen this in action before in 7th grade grammer. If the examples don't enlighten you, there are many great resources that will explain further. 
+
+                      Why would you lemmatize words? The fundamental idea is to concentrate meanings so the model can more easily understand words. When the computer "reads" words it really is processing a bunch of numbers. For a computer, "run," "runs," and "running" are all totally different words. As humans, we know that these words are all conveying the idea of "run" in various tenses. Thus, when lemmatizing words, we assign all of these instances to a single word and give the model much more information from which to make decisions for any given root word. 
+
+                      ## ID Vectorization
+
+                      This is the one of the most basic forms of encodding information. The idea is simple; Give every word in the corpus a unique integer ID. That's it.
+
+                      ## TF-IDF
+
+                      TF-IDF is a token frequency based vectorization method. TF-IDF stands for term frequency - inverse document frequency and is most commonly used in conjunction with NLP feature engineering processes such as stemming and lematization. We will follow this trend. To know more about the math behind TF-IDF you can check out the [wikipedia](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) page and go from there. 
+
+                      ## Word Embeddings
+
+                      Word embeddings were a field that bloomed with the emergance of deep NLP. There are a number of great detailed explanations of how embeddings were derived from neural newworks. For simplicity sake, word embeddings are created by defining a space that designate the number of dimensions you want to consider for each word - typically integer multiples of 50 are fan favorites. This space is then used as part of a neural network architecture and trained for a number of epochs. What results is a matrix with the number of dimensions specified and weights for each dimension as adjusted by the neural network while training on a text corpus. More interestingly, because the neural network attemped to optimize the matrix for the particular text corpus supplied, the dimensions of the matrix end up being surprisingly acute semantic relationships between the words in the text. Boiling this down, embeddings are matricies that carry semantic relationships between words. This is very effective within deep NLP as the decisions made by the overarching regressor/classifier are use the underlying semantic meanings of the words within the text to make decisions rather than more general tools (like TF-IDF or other term frequency vectorizing methods.)
                     '''
                   ],
                 ), 
