@@ -1,5 +1,4 @@
 capstone-env/*
 politifact/*
 __*
-.*
 word2vec.zip
