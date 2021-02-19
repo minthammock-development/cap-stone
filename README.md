@@ -1,10 +1,15 @@
-# Project Action Items
+# Modeling Truth: Can Neural Networks Sniff Out Lies
 
-1.   Finish model narrative
-4.   Finish non-technical
-5.   Consider what adding the author does to prediction
+## Author: Michael Mahoney
+
+### Email: michaeljosephmahoney@gmail.com
+
+#### Git-Hub Repo: https://github.com/minthammock/cap-stone
+
+#### Project Application: https://capstone-dash-app.herokuapp.com/
 
 # Abstract
+
 This paper is a first attempt at using neural network technology to determine the truth value of short, headline like, statements. The statements used in this paper are political in nature. While an examination of lies in politics was not my direct motivation, ultimately, many of the damaging mis-information campaigns are centered around the political scene. The sole data source for this project reflects this political leaning, and as such, I will refrain from drawing conclusions about more general statements. 
 
 Since the proliferation of social media as a primary means of spreading misinformation, society, worldwide, has been reeling from the effects. Here in the United States, misinformation has been used as a tool for undermining our most fundamental democratic institutions and is quickly eroding the moral cohesion of local communities. Since the beginning of the mis-information plague, there have yet to be any widely used tools which can combat the disease with reasonable surety. Perhaps, this is due to the fact that a lie takes only a moment to create, but hours to fully debunk. To be clear, this paper is an exploration of neural networks and their ability to discern truth with varying degrees of information. At this point, the models are not performing well enough to be used as a digital vaccine to the larger problem. It is my hope that the work in this paper will be improved upon by others to create a lasting light in the dark sea of lies we have all been swimming in.
@@ -23,6 +28,7 @@ This paper is for all interested in misinformation and how modeling might be use
 CRISP-DM was my research methodology of choice. Now to the matter at hand.
 
 ## Recommendations
+
 Despite the lack of the production worthy model there are several action items for various stake holders. 
 1. For those wishing to devote resources to fight misinformation; virtually all clusters of the false quotes center around presidential elections and candidates. Reasorces should be ramped up and deployed at times of heightened contention during presidential elections and primaries. 
 2. For politicians, most misinformation is based around people and not issues (with the notable exception of health care). If you wish to advance legislation, decoupling the issue from individuals will the best way to limit misinformation's impact.
@@ -35,6 +41,7 @@ Given the intent of my work is to act as a defense against misinformation I beli
 What does a defense against misinformation look like? The answer is multifaceted. A general model is a great start, but not the end all be all. No model will be perfect, and thus it is equally important to understand what lies look like. Any understanding of the structure of lies will be essential in both, curtailing the pervasive spread and efficiently debunking them in near real time.
 
 ## Why Care About Misinformation?
+
 It's worth asking, why anyone should care about verifying the truth value of content floating around the internet? Any normal person would understand that the answer involves scary things like ethics and morals but for those of you not convinced I'll continue on. 
 
 How about money? Everyone likes money, right? While the total cost of misinformation is difficult to ascertain and hard to quantify, CHEQ AI, a cybersecurity company that uses AI to protect entities from misinformation, commissioned a study run by professor Roberto Cavazos from the University of Baltimore, to quantify the cost of mis-information on businesses in the US and abroad. You can find the whole article here, but the general conclusions are the following.
@@ -65,19 +72,20 @@ There are several different versions of what monitoring for misinformation can l
 No model is perfect, and I take personal care when thinking about integrating AI into a system that makes decisions about people. In the interest of staying away from the messy world of censorship, this paper will focus on finding the truth value of statements and shedding light on the connection between truth and language such that social media companies will be able to find specific text with strong correlations to specific truth categories.
 
 # Data Understanding
+
 The data used for this paper was pulled from Politifact.com. Politifact is a lovely organization that takes the time to investigate viral claims that deal with hot or sensative topics. Unsurprisingly, many of these claims are political in nature, but not strictly so. Politifact investigates these claims and writes a small article summarizing their findings as to the validity of the content in question. They do the hard work! If you find this paper at all interesting it might be worth sending a little money their way. 5 bucks people, I'm not asking for the moon. Anyways, Politifact vets the claims and boils it down to six distinct categories: Pants on fire, false, barly-true, half-true and true. Pants fire is a special category reserved for falsehoods that not only lack any semblence of truth, but are also particularly outlandish or detrimental. A good example would be, "The democrates say they are going to blow up the moon." The classifications are somewhat subjective but because professionals took the time to look into the truth and cite their sources, I hold the labels as the gold standard when it comes to verifying the level of truth in a statement. There are approximately 19000 quotes in total.
 
 An important consideration ever present in modeling is class imbalance. Here's our given composition.
 
-<img src="https://drive.google.com/uc?id=1EjxE9yDNB9mj2lFiUfnypbdTDUOcZMKC" />
+![pie_chart](https://drive.google.com/uc?id=1EjxE9yDNB9mj2lFiUfnypbdTDUOcZMKC)
 
 The imbalence is not as severe as it could be, but this still merits adjusting for. Sci-kit learn has a particular function which calculates the weights needed for each class in order to mimic balanced amounts of data.
 
-What do these columns look like? The next visual represents the 10 most frequent authors and the breakdown of their quotes into the various truth values. 
+What do these columns look like? The next visual represents the 10 most frequent authors and the breakdown of their quotes into the various truth values.
 
-<img src="https://drive.google.com/uc?id=1gL4xn0HS9aSG4sG4O38i6uVu8MV_Zqlh" />
+![top_authors](https://drive.google.com/uc?id=1gL4xn0HS9aSG4sG4O38i6uVu8MV_Zqlh)
 
-With the rise of social media, it makes sense that those at the top of the list are figures in the modern political scene. In general, Politifact reviews quotes with implications for the real world. With the prolification of mis-information as a political tool, much of their work has centered on uncovering the truth behind statements made in the political sphere. Please note that there are lumped categories such as "Facebook posts" and "Viral image". These categories include quotes that achieved viral status in spreading through social media sites. You won't find a good definition of viral in this paper as the exact criteria used to determine what elevates something to viral status isn't exactly clear. For a better sense of the nature of the quotes themselves, please see the hosted application for this paper. 
+With the rise of social media, it makes sense that those at the top of the list are figures in the modern political scene. In general, Politifact reviews quotes with implications for the real world. With the prolification of mis-information as a political tool, much of their work has centered on uncovering the truth behind statements made in the political sphere. Please note that there are lumped categories such as "Facebook posts" and "Viral image". These categories include quotes that achieved viral status in spreading through social media sites. You won't find a good definition of viral in this paper as the exact criteria used to determine what elevates something to viral status isn't exactly clear. For a better sense of the nature of the quotes themselves, please see the hosted application for this paper.
 
 Given the top authors are pulled mostly from the political realm, it follows that words common in modern political times are highly represented. Check out the following two word clouds for a more intuitive idea about the nature of the quotes corpus. This example excludes stop words from consideration (the, and, where, in, is, I, etc...).
 
@@ -281,7 +289,6 @@ As the author of this paper it's depressing how much is still left to do. I mean
 
 These are the reasonable goals on the horizon! I am ambitious that I will see them through in the near future as my intersest in this subject hasn't dissolved - wanned slightly from burnout, but a short break should do wonders. Misinformation remains a massive obsticle in social cohesion and well being and the work isn't going to be done by watching on the sidelines. 
 
-There are some sections of code below this text that include elements I didn't want to integrate into the general narrative or aren't ready for presentation. Feel free to check them out but don't blame me for the poorly formatted and commented code! 
+There are some sections of code below this text that include elements I didn't want to integrate into the general narrative or aren't ready for presentation. Feel free to check them out but don't blame me for the poorly formatted and commented code!
 
 Cheers everyone, thanks for reading.
-
