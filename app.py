@@ -484,6 +484,18 @@ app.layout = html.Div(
           value = 'tab_2',
           className='tab',
           children=[
+            dcc.Markdown(
+              children = ['''
+              # Author and Quote Exploration
+
+              This page is dedicated to exploring the corpus used in this project. Below you will find an interactive graph that
+              can be filtered by author. If you hover over the bar graph, the page will display an example quote from said author
+              from the specific truth catagory you are hovering over. Clicking a bar will filter the spreadsheet underneath the graph
+              the specified author and truth category. This can be changed by clicking on another bar or by removing the filters from 
+              the spreadsheet filter. 
+              '''],
+              className = 'markdown'
+            ),
             html.Div(
               className = 'graph_editors',
               children=[
