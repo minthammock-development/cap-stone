@@ -707,57 +707,61 @@ app.layout = html.Div(
             )
           ]
         ),
-        dcc.Tab(
-          id = 'tab_3',
-          label = 'Word2Vec Embedding',
-          value = 'tab_3',
-          className='tab',
-          children=[
-            html.Div(
-              className = 'graph_editors',
-              children=[
-                dcc.Dropdown(
-                  # className = 'graph',
-                  id='dropdown_2',
-                  options=[
-                    {'label': 'All', 'value': 'all'},
-                    {'label': 'True', 'value': 'true'},
-                    {'label': 'Mostly-True', 'value': 'mostly-true'},
-                    {'label': 'Half-True', 'value': 'half-true'},
-                    {'label': 'Barely-True', 'value': 'barely-true'},
-                    {'label': 'False', 'value': 'false'},
-                    {'label': 'Pants-On-Fire', 'value': 'pants-fire'},
-                  ],
-                  value='all'
-                ),
-                dcc.Input(
-                  # className = 'graph',
-                  id="input_2",
-                  type='search',
-                  placeholder="Words Like",
-                ),
-                dcc.Input(
-                  # className = 'graph',
-                  id="input_3",
-                  type='search',
-                  placeholder="Words Not like",
-                ),
-                html.Button(
-                  id = 'button_1',
-                  value = 'Show Associations'
-                ),
-              ]
-            ),
-            cyto.Cytoscape(
-              id='node_graph',
-              layout={'name': 'preset'},
-              style={'width': '90%', 'height': '1000px'},
-              elements=[
-                  {'data': {'id': 'one', 'label': 'Use the search bars to get started'}, 'position': {'x': 0, 'y': 0}},
-              ]
-            )
-          ]
-        ),
+        
+        # This tab needs some polish before going into production
+
+        # dcc.Tab(
+        #   id = 'tab_3',
+        #   label = 'Word2Vec Embedding',
+        #   value = 'tab_3',
+        #   className='tab',
+        #   disabled = True,
+        #   children=[
+        #     html.Div(
+        #       className = 'graph_editors',
+        #       children=[
+        #         dcc.Dropdown(
+        #           # className = 'graph',
+        #           id='dropdown_2',
+        #           options=[
+        #             {'label': 'All', 'value': 'all'},
+        #             {'label': 'True', 'value': 'true'},
+        #             {'label': 'Mostly-True', 'value': 'mostly-true'},
+        #             {'label': 'Half-True', 'value': 'half-true'},
+        #             {'label': 'Barely-True', 'value': 'barely-true'},
+        #             {'label': 'False', 'value': 'false'},
+        #             {'label': 'Pants-On-Fire', 'value': 'pants-fire'},
+        #           ],
+        #           value='all'
+        #         ),
+        #         dcc.Input(
+        #           # className = 'graph',
+        #           id="input_2",
+        #           type='search',
+        #           placeholder="Words Like",
+        #         ),
+        #         dcc.Input(
+        #           # className = 'graph',
+        #           id="input_3",
+        #           type='search',
+        #           placeholder="Words Not like",
+        #         ),
+        #         html.Button(
+        #           id = 'button_1',
+        #           value = 'Show Associations'
+        #         ),
+        #       ]
+        #     ),
+        #     cyto.Cytoscape(
+        #       id='node_graph',
+        #       layout={'name': 'preset'},
+        #       style={'width': '90%', 'height': '1000px'},
+        #       elements=[
+        #           {'data': {'id': 'one', 'label': 'Use the search bars to get started'}, 'position': {'x': 0, 'y': 0}},
+        #       ]
+        #     )
+        #   ]
+        # ),
         dcc.Tab(
           id = 'tab_4',
           label = 'LDA Cluster Models',
