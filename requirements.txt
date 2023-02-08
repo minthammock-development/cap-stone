@@ -6,7 +6,7 @@ cffi==1.14.4
 click==7.1.2
 colorama==0.4.4
 constantly==15.1.0
-cryptography==3.3.1
+cryptography==39.0.1
 cssselect==1.1.0
 Cython==0.29.14
 dash==1.18.1
